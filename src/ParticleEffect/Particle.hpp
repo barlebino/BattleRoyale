@@ -9,20 +9,17 @@ class Particle {
         /* Attributes*/
         Entity particle;
         int type;
-        int n;
+        int i;
         int total;
         float life;
         glm::vec3 origin;
 
         /* Constructors */
-        Particle(int type, int n, int total, glm::vec3 origin, float duration);
-        
-        
-        ~Particle();
+        Particle(int type, int i, int total, glm::vec3 origin, float duration, Mesh *mesh, ModelTexture texture);
 
         void Particle::update(float dt);
         void Particle::die();
-        void Particle::updateMovement(float dt);
+        void Particle::updateMovement();
         glm::vec3 Particle::sphereMove();
 };
 

@@ -13,6 +13,7 @@ class TutorialWorld : public World {
     public:
         /* World-specific render targets */
         std::vector<Entity *> entities;
+        std::vector<ParticleEffect *> particleEffects;
 
         /* World-specific members */
         Light *light;

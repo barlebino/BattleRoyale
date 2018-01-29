@@ -15,6 +15,7 @@
 class World;
 class Shader;
 class Entity;
+class ParticleEffect;
 
 class MasterRenderer {
     public:
@@ -22,12 +23,16 @@ class MasterRenderer {
         enum ShaderTypes {
             ERROR,
             ENTITY_SHADER,
+            PARTICLE_SHADER
         };
         /* List of active renderers */
         std::vector<Shader *> shaders;
 
         /* Activate subrenderers */
         void activateEntityShader(std::vector<Entity *> *);
+
+        /* ADDITION */
+        //void activateParticleShader(std::vector<ParticleEffect *> *);
 
         /* Init */
         void init(const Context &);

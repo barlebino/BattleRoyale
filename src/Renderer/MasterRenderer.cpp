@@ -5,6 +5,10 @@
 
 #include "Entity/EntityShader/EntityShader.hpp"
 
+/* Addition */
+//#include "ParticleEffect/ParticleShader/ParticleShader.hpp"
+#include "ParticleEffect/ParticleEffect.hpp"
+
 #include <iostream>
 
 /* Master render function */
@@ -107,6 +111,23 @@ void MasterRenderer::activateEntityShader(std::vector<Entity *> *entities) {
         }
     }
 }
+
+/*void MasterRenderer::activateParticleShader(std::vector<ParticleEffect *> *particleEffects) {
+    ParticleShader *pShader = new ParticleShader;
+    if (pShader->init(particleEffects)) {
+        shaders.push_back(pShader);
+        if (verbose) {
+            std::cout << "Particle Shader activated" << std::endl;
+        }
+    }
+    else {
+        delete pShader;
+        if (verbose) {
+            std::cout << "Particle Shader failed to activate" << std::endl;
+        }
+    }
+}*/
+
 void MasterRenderer::cleanUp() {
     /* Clean up all active subrenderers */
     for (auto &shader : shaders) {

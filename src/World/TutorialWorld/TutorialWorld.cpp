@@ -13,7 +13,21 @@ void TutorialWorld::init(Context &ctx, Loader &loader) {
     ModelTexture modelTexture(0.3f,
                     glm::vec3(0.f, 0.f, 1.f),
                     glm::vec3(1.f));
-    entities.push_back(new Entity(mesh, modelTexture, glm::vec3(5.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(3.f)));
+    //NEW CODE
+
+    int type = 0;
+    int n = 300;
+    int duration = 5.f;
+    Entity *pe = new Entity(mesh, modelTexture, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
+    ParticleEffect *test = new ParticleEffect(type, n, duration, pe);
+    particleEffects.push_back(test);
+    for (int i = 0; i < n; i++) {
+        Entity *e = &test->particles[i].particle;
+
+        entities.push_back(e);
+    }
+
+    entities.push_back(new Entity(mesh, modelTexture, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(3.f)));
 
     /* World-specific members */
     this->P = ctx.display.projectionMatrix;
@@ -22,6 +36,7 @@ void TutorialWorld::init(Context &ctx, Loader &loader) {
 
 void TutorialWorld::prepareRenderer(MasterRenderer *mr) {
     mr->activateEntityShader(&entities);
+    //mr->activateParticleShader(&particleEffects);
 }
 
 void TutorialWorld::prepareUniforms() {
@@ -46,11 +61,18 @@ void TutorialWorld::update(Context &ctx) {
     takeInput(ctx.mouse, ctx.keyboard);
     camera->update();
   
+    /* update Particles*/
+    for (auto pe : particleEffects) {
+        pe->update();
+    }
+
     /* Update entities */
     for (auto e : entities) {
-        e->update();
-        e->rotation.y += 15.f * ctx.timeStep;
+        //e->update();
+        //e->rotation.y += 15.f * ctx.timeStep;
     }
+
+    
 }
 
 void TutorialWorld::takeInput(Mouse &mouse, Keyboard &keyboard) {

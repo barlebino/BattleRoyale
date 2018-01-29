@@ -1,25 +1,25 @@
-#include "EntityShader.hpp"
+#include "ParticleShader.hpp"
 
-#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_transform.hpp" 
 
-bool EntityShader::init(std::vector<Entity *> *entities) {
+bool ParticleShader::init(std::vector<ParticleEffect*> *particleEffects) {
     /* Parent init */
-    if (!entities || !Shader::init()) {
+    if (!particleEffects || !Shader::init()) {
         return false;
     }
     
     /* Set render target */
-    this->entitiesPointer = entities;
+    this->particleEffectsPointer = particleEffects;
 
     /* Set enum type */
-    this->type = MasterRenderer::ShaderTypes::ENTITY_SHADER;
+    this->type = MasterRenderer::ShaderTypes::PARTICLE_SHADER;
 
     addAllLocations();
         
     return true;
 }
 
-void EntityShader::addAllLocations() {
+void ParticleShader::addAllLocations() {
     /* Add attributes */
     addAttribute("vertexPos");
     addAttribute("vertexNormal");
@@ -47,47 +47,49 @@ void EntityShader::addAllLocations() {
     addUniform("lightAtt");
 }
 
-void EntityShader::render() {
+void ParticleShader::render() {
     /* Loop through every entity */
     // TODO : batched render
     glm::mat4 M;
-    for (auto &e : *entitiesPointer) {
+    for (auto &p : *particleEffectsPointer) {
         /* If entity mesh doesn't contain geometry, skip it */
-        if (!e->mesh || !e->mesh->vertBuf.size()) {
+        if (!p->pe->mesh || !p->pe->mesh->vertBuf.size()) {
             continue;
         }
 
         /* Create and load model matrix */
-        M = glm::translate(glm::mat4(1.f), e->position);
-        M *= glm::rotate(glm::mat4(1.f), glm::radians(e->rotation.x), glm::vec3(1, 0, 0));
-        M *= glm::rotate(glm::mat4(1.f), glm::radians(e->rotation.y), glm::vec3(0, 1, 0));
-        M *= glm::rotate(glm::mat4(1.f), glm::radians(e->rotation.z), glm::vec3(0, 0, 1));
-        M *= glm::scale(glm::mat4(1.f), e->scale);
+        M = glm::translate(glm::mat4(1.f), p->pe->position);
+        M *= glm::rotate(glm::mat4(1.f), glm::radians(p->pe->rotation.x), glm::vec3(1, 0, 0));
+        M *= glm::rotate(glm::mat4(1.f), glm::radians(p->pe->rotation.y), glm::vec3(0, 1, 0));
+        M *= glm::rotate(glm::mat4(1.f), glm::radians(p->pe->rotation.z), glm::vec3(0, 0, 1));
+        M *= glm::scale(glm::mat4(1.f), p->pe->scale);
         loadM(&M);
 
         /* Load texture/material */
-        loadTexture(e->modelTexture);
+        loadTexture(p->pe->modelTexture);
 
         /* Load mesh */
-        loadMesh(e->mesh);
+        loadMesh(p->pe->mesh);
 
         /* Draw */
-        glDrawElements(GL_TRIANGLES, (int)e->mesh->eleBuf.size(), GL_UNSIGNED_INT, nullptr);
-        
-       
+        glDrawElements(GL_TRIANGLES, (int)p->pe->mesh->eleBuf.size(), GL_UNSIGNED_INT, nullptr);
+
+        /* EDITS */
+        //int nParticles = 100;
+        //glDrawElementsInstanced(GL_TRIANGLES, (int)e->mesh->eleBuf.size(), GL_UNSIGNED_INT, nullptr, nParticles);
 
         /* Unload mesh */
-        unloadMesh(e->mesh);
+        unloadMesh(p->pe->mesh);
 
         /* Unload texture/material */
-        unloadTexture(e->modelTexture);
+        unloadTexture(p->pe->modelTexture);
     }
 }
 
 /* Bind mesh attributes to VAO/VBOs 
  * All Meshes are assumed to have valid vertices and element indices 
  * Other attributes can be exlcluded */
-void EntityShader::loadMesh(const Mesh *mesh) {
+void ParticleShader::loadMesh(const Mesh *mesh) {
     /* Bind mesh VAO */
     glBindVertexArray(mesh->vaoId);
     
@@ -118,7 +120,7 @@ void EntityShader::loadMesh(const Mesh *mesh) {
 }
 
 /* Bind material properties and  texture if provided */
-void EntityShader::loadTexture(const ModelTexture &modelTexture) {
+void ParticleShader::loadTexture(const ModelTexture &modelTexture) {
     /* Bind texture if it exists */
     if(modelTexture.texture && modelTexture.texture->textureId != 0) {
         loadUsesTexture(true);
@@ -138,7 +140,7 @@ void EntityShader::loadTexture(const ModelTexture &modelTexture) {
 }
 
 /* Unbind mesh */
-void EntityShader::unloadMesh(const Mesh *mesh) {
+void ParticleShader::unloadMesh(const Mesh *mesh) {
     glDisableVertexAttribArray(getAttribute("vertexPos"));
 
     int pos = getAttribute("vertexNormal");
@@ -155,34 +157,34 @@ void EntityShader::unloadMesh(const Mesh *mesh) {
 }
 
 /* Unbind model/texture*/
-void EntityShader::unloadTexture(const ModelTexture &modelTexture) {
+void ParticleShader::unloadTexture(const ModelTexture &modelTexture) {
     if (modelTexture.texture) {
         Shader::unloadTexture(modelTexture.texture->textureId);
     }
 }
 
-void EntityShader::cleanUp() {
+void ParticleShader::cleanUp() {
     Shader::cleanUp();
 }
 
-void EntityShader::loadM(const glm::mat4 *m) {
+void ParticleShader::loadM(const glm::mat4 *m) {
     this->loadMat4(getUniform("M"), m);
 }
 
-void EntityShader::loadMaterial(const float ambient, const glm::vec3 diffuse, const glm::vec3 specular) {
+void ParticleShader::loadMaterial(const float ambient, const glm::vec3 diffuse, const glm::vec3 specular) {
     this->loadFloat(getUniform("matAmbient"), ambient);
     this->loadVec3(getUniform("matDiffuse"), diffuse);
     this->loadVec3(getUniform("matSpecular"), specular);
 }
 
-void EntityShader::loadShine(const float s) {
+void ParticleShader::loadShine(const float s) {
     this->loadFloat(getUniform("shine"), s);
 }
 
-void EntityShader::loadUsesTexture(const bool b) {
+void ParticleShader::loadUsesTexture(const bool b) {
     this->loadBool(getUniform("usesTexture"), b);
 }
 
-void EntityShader::loadTexture(const Texture *texture) {
+void ParticleShader::loadTexture(const Texture *texture) {
     this->loadInt(getUniform("textureImage"), texture->textureId);
 }

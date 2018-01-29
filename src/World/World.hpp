@@ -9,6 +9,7 @@
 #include "Light/Light.hpp"
 #include "Toolbox/Loader.hpp"
 #include "Toolbox/Enum.hpp"
+#include "ParticleEffect/ParticleEffect.hpp"
 
 #include <string>
 #include <vector>
