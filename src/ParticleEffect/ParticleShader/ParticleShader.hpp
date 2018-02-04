@@ -16,8 +16,8 @@
 class ParticleShader : public Shader {
     public:
         /* Define GLSL shader locations */
-        ParticleShader() : Shader("../src/Entity/ParticleShader/particle_vertex_shader.glsl",
-                                "../src/Entity/ParticleShader/particle_fragment_shader.glsl") { }
+        ParticleShader() : Shader("../src/ParticleEffect/ParticleShader/particle_vertex_shader.glsl",
+                                "../src/ParticleEffect/ParticleShader/particle_fragment_shader.glsl") { }
         
         /* Reference to render target */
         std::vector<ParticleEffect *> *particleEffectsPointer;
@@ -47,6 +47,7 @@ class ParticleShader : public Shader {
         void loadShine(const float);
         void loadUsesTexture(const bool);
         void loadTexture(const Texture *);
+        //void loadTimeData(const float);
 };
 
 #endif

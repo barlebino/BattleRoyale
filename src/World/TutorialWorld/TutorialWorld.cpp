@@ -14,11 +14,26 @@ void TutorialWorld::init(Context &ctx, Loader &loader) {
                     glm::vec3(0.f, 0.f, 1.f),
                     glm::vec3(1.f));
     //NEW CODE
-
     int type = 0;
-    int n = 300;
-    int duration = 5.f;
-    Entity *pe = new Entity(mesh, modelTexture, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
+    int n = 500;
+    int duration = 10.f;
+    glm::vec3 position = glm::vec3(50.f, -5.f, -5.f);
+    glm::vec3 rotation = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec3 scale = glm::vec3(1.f);
+    Entity *pe = new Entity(mesh, modelTexture, position, rotation, scale);
+    ParticleEffect *explosion = spawnParticleEffect(type, n, duration, pe);
+
+    particleEffects.push_back(explosion);
+    //entities.push_back(new Entity(mesh, modelTexture, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(3.f)));
+
+    /* World-specific members */
+    this->P = ctx.display.projectionMatrix;
+    this->V = glm::lookAt(camera->position, camera->lookAt, glm::vec3(0, 1, 0));
+}
+
+
+ParticleEffect* TutorialWorld::spawnParticleEffect(int type, int n, float duration, Entity *pe) {
+    
     ParticleEffect *test = new ParticleEffect(type, n, duration, pe);
     particleEffects.push_back(test);
     for (int i = 0; i < n; i++) {
@@ -27,16 +42,12 @@ void TutorialWorld::init(Context &ctx, Loader &loader) {
         entities.push_back(e);
     }
 
-    entities.push_back(new Entity(mesh, modelTexture, glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(3.f)));
-
-    /* World-specific members */
-    this->P = ctx.display.projectionMatrix;
-    this->V = glm::lookAt(camera->position, camera->lookAt, glm::vec3(0, 1, 0));
+    return test;
 }
 
 void TutorialWorld::prepareRenderer(MasterRenderer *mr) {
-    mr->activateEntityShader(&entities);
-    //mr->activateParticleShader(&particleEffects);
+    //mr->activateEntityShader(&entities);
+    mr->activateParticleShader(&particleEffects);
 }
 
 void TutorialWorld::prepareUniforms() {
@@ -46,7 +57,22 @@ void TutorialWorld::prepareUniforms() {
     UniformData *lightPos = new UniformData{ UniformType::Vec3, "lightPos", (void *)&light->position };
     UniformData *lightCol = new UniformData{ UniformType::Vec3, "lightCol", (void *)&light->color };
     UniformData *lightAtt = new UniformData{ UniformType::Vec3, "lightAtt", (void *)&light->attenuation };
-    
+    UniformData *timeData = new UniformData{ UniformType::Float, "timeData", (void *)&particleEffects[0]->tData };
+    UniformData *total = new UniformData{ UniformType::SignedInt32, "total", (void *)&particleEffects[0]->total };
+    UniformData *origin = new UniformData{ UniformType::Vec3, "origin", (void *)&particleEffects[0]->pe->position };
+
+
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(PData);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(VData);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(cameraPos);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(lightPos);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(lightCol);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(lightAtt);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(timeData);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(total);
+    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(origin);
+
+
     uniforms[MasterRenderer::ShaderTypes::ENTITY_SHADER].push_back(PData);
     uniforms[MasterRenderer::ShaderTypes::ENTITY_SHADER].push_back(VData);
     uniforms[MasterRenderer::ShaderTypes::ENTITY_SHADER].push_back(cameraPos);

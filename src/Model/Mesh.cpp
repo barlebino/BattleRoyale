@@ -7,7 +7,7 @@ Mesh::Mesh() :
     vaoId(0), 
     vertBufId(0), 
     norBufId(0), 
-    texBufId(0), 
+    texBufId(0),
     eleBufId(0) 
 {
 }

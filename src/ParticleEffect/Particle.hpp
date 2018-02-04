@@ -11,16 +11,15 @@ class Particle {
         int type;
         int i;
         int total;
-        float life;
         glm::vec3 origin;
 
         /* Constructors */
-        Particle(int type, int i, int total, glm::vec3 origin, float duration, Mesh *mesh, ModelTexture texture);
+        Particle(int type, int i, int total, glm::vec3 origin, Mesh *mesh, ModelTexture texture);
 
-        void Particle::update(float dt);
+        void Particle::update(float tData);
         void Particle::die();
-        void Particle::updateMovement();
-        glm::vec3 Particle::sphereMove();
+        void Particle::updateMovement(float tData);
+        glm::vec3 Particle::sphereMove(float tData);
 };
 
 #endif // !_PARTICLE_HPP_

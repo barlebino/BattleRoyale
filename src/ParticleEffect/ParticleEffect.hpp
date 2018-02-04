@@ -25,7 +25,7 @@ class ParticleEffect {
         float life;
         bool toDie;
         std::vector<Particle> particles;
-
+        float tData;
         double t;
 
         /* Constructors */

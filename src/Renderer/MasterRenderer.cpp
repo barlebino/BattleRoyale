@@ -6,7 +6,7 @@
 #include "Entity/EntityShader/EntityShader.hpp"
 
 /* Addition */
-//#include "ParticleEffect/ParticleShader/ParticleShader.hpp"
+#include "ParticleEffect/ParticleShader/ParticleShader.hpp"
 #include "ParticleEffect/ParticleEffect.hpp"
 
 #include <iostream>
@@ -51,7 +51,7 @@ void MasterRenderer::bindWorldUniforms(const World *world, Shader *shader) {
                 // TODO
                 break;
             case(UniformType::SignedInt32):
-                // TODO 
+                shader->loadInt(pos, *(int *)uniformData->dataptr);
                 break;
             case(UniformType::UnsignedInt8):
                 // TODO
@@ -112,7 +112,7 @@ void MasterRenderer::activateEntityShader(std::vector<Entity *> *entities) {
     }
 }
 
-/*void MasterRenderer::activateParticleShader(std::vector<ParticleEffect *> *particleEffects) {
+void MasterRenderer::activateParticleShader(std::vector<ParticleEffect *> *particleEffects) {
     ParticleShader *pShader = new ParticleShader;
     if (pShader->init(particleEffects)) {
         shaders.push_back(pShader);
@@ -126,7 +126,7 @@ void MasterRenderer::activateEntityShader(std::vector<Entity *> *entities) {
             std::cout << "Particle Shader failed to activate" << std::endl;
         }
     }
-}*/
+}
 
 void MasterRenderer::cleanUp() {
     /* Clean up all active subrenderers */

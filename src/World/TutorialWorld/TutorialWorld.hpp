@@ -32,6 +32,7 @@ class TutorialWorld : public World {
         void update(Context &);
         void takeInput(Mouse &, Keyboard &);
         void cleanUp();
+        ParticleEffect *spawnParticleEffect(int type, int n, float duration, Entity *pe);
 };
 
 #endif

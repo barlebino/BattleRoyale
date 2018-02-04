@@ -24,12 +24,19 @@ void ParticleShader::addAllLocations() {
     addAttribute("vertexPos");
     addAttribute("vertexNormal");
     addAttribute("vertexTexture");
+    addAttribute("particleOffset");
 
     /* Add matrix transforms */
     addUniform("P");
     addUniform("M");
     addUniform("V");
     addUniform("cameraPos");
+
+    /* Add Particle Data */
+    addUniform("timeData");
+    addUniform("total");
+    addUniform("origin");
+
 
     /* Add texture info */
     addUniform("usesTexture");
@@ -72,11 +79,34 @@ void ParticleShader::render() {
         loadMesh(p->pe->mesh);
 
         /* Draw */
-        glDrawElements(GL_TRIANGLES, (int)p->pe->mesh->eleBuf.size(), GL_UNSIGNED_INT, nullptr);
+        //glDrawElements(GL_TRIANGLES, (int)p->pe->mesh->eleBuf.size(), GL_UNSIGNED_INT, nullptr);
 
-        /* EDITS */
-        //int nParticles = 100;
-        //glDrawElementsInstanced(GL_TRIANGLES, (int)e->mesh->eleBuf.size(), GL_UNSIGNED_INT, nullptr, nParticles);
+        /* Set particle positios*/
+        int pos = getAttribute("particleOffset");
+        unsigned int partBufId;
+        
+
+        /* Generate new position every frame */
+        std::vector<float> partBuf;
+        for (int i = 0; i < p->total; i++) {
+            glm::vec3 position = p->particles[i].sphereMove(p->tData);
+            partBuf.push_back(position.x);
+            partBuf.push_back(position.y);
+            partBuf.push_back(position.z);
+        }
+
+        /* Do all the buffer stuff */
+        glGenBuffers(1, &partBufId);
+        glBindBuffer(GL_ARRAY_BUFFER, partBufId);
+        glBufferData(GL_ARRAY_BUFFER, partBuf.size() * sizeof(float), &partBuf[0], GL_STATIC_DRAW);
+        glEnableVertexAttribArray(pos);
+        glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
+
+        /* update particle position attribute once per instance */
+        glVertexAttribDivisor(pos, 1);
+
+        /* Draw one particle effect */
+        glDrawElementsInstanced(GL_TRIANGLES, (int)p->pe->mesh->eleBuf.size(), GL_UNSIGNED_INT, nullptr, p->total);
 
         /* Unload mesh */
         unloadMesh(p->pe->mesh);
@@ -113,6 +143,7 @@ void ParticleShader::loadMesh(const Mesh *mesh) {
         glEnableVertexAttribArray(pos);
         glBindBuffer(GL_ARRAY_BUFFER, mesh->texBufId);
         glVertexAttribPointer(pos, 2, GL_FLOAT, GL_FALSE, 0, (const void *)0);
+
     }
 
     /* Bind indices buffer VBO */
@@ -188,3 +219,7 @@ void ParticleShader::loadUsesTexture(const bool b) {
 void ParticleShader::loadTexture(const Texture *texture) {
     this->loadInt(getUniform("textureImage"), texture->textureId);
 }
+
+/* void ParticleShader::loadTimeData(const float tData) {
+    this->loadFloat(getUniform("timeData"), tData);
+} */

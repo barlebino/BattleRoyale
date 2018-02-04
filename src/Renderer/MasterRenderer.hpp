@@ -32,7 +32,7 @@ class MasterRenderer {
         void activateEntityShader(std::vector<Entity *> *);
 
         /* ADDITION */
-        //void activateParticleShader(std::vector<ParticleEffect *> *);
+        void activateParticleShader(std::vector<ParticleEffect *> *);
 
         /* Init */
         void init(const Context &);
