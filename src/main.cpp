@@ -9,6 +9,7 @@
 #include "Context/Context.hpp"
 #include "World/World.hpp"
 #include "Renderer/MasterRenderer.hpp"
+#include "FileReader.hpp"
 
 int main(int argc, char **argv) {
     srand(time(0));
@@ -17,6 +18,8 @@ int main(int argc, char **argv) {
     Loader loader;      /* Load .obj models and .png textures   */
     MasterRenderer mr;  /* Renderer                             */
     World *world;       /* Application - collection of features */
+    FileReader fileReader;
+    std::string level;
 
     /* Process args */
     if (context.processArgs(argc, argv)) {
@@ -31,6 +34,10 @@ int main(int argc, char **argv) {
     context.init();
     loader.init(context);
 
+    level = fileReader.readFile();
+    //std::cout << level << std::endl;
+    fileReader.loadLevel(level);
+    
     /* Create world */
     world = context.createWorld();
 

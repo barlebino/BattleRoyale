@@ -7,3 +7,12 @@ resources/
 other/
 Win32/
 
+*.tlog
+/x64/Debug
+/Battle Royale.vcxproj.user
+/Battle Royale.vcxproj.filters
+/Battle Royale.vcxproj
+/Battle Royale.sln
+/Debug/vc141.pdb
+/Debug/vc141.idb
+/Debug/Battle Royale.log

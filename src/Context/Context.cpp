@@ -1,6 +1,7 @@
 #include "Context.hpp"
 #include "World/World.hpp"
 #include "World/TutorialWorld/TutorialWorld.hpp"
+#include "FileReader.hpp"
 
 #include <string.h>  /* strcmp, strlen  */
 #include <iostream>  /* cout, stoi      */

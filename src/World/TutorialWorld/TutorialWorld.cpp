@@ -1,6 +1,7 @@
 #include "TutorialWorld.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+
 void TutorialWorld::init(Context &ctx, Loader &loader) {
     /* Set up light */
     this->light = new Light(glm::vec3(-1000, 1000, 1000), glm::vec3(1.f), glm::vec3(1.f, 0.0f, 0.0f));
@@ -9,11 +10,14 @@ void TutorialWorld::init(Context &ctx, Loader &loader) {
     this->camera = new Camera;
 
     /* Entities */
-    Mesh *mesh = loader.loadObjMesh("bunny.obj");
-    ModelTexture modelTexture(0.3f,
+    Mesh *mesh = loader.loadObjMesh("Hamburger.obj");
+    /*ModelTexture modelTexture(0.3f,
                     glm::vec3(0.f, 0.f, 1.f),
-                    glm::vec3(1.f));
-    entities.push_back(new Entity(mesh, modelTexture, glm::vec3(5.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(3.f)));
+                    glm::vec3(1.f));*/
+    loader.loadTexture("Hamburger_BaseColor.png");
+
+    entities.push_back(new Entity(mesh, loader.loadTexture("Hamburger_BaseColor.png"), glm::vec3(5.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(3.f)));
+
 
     /* World-specific members */
     this->P = ctx.display.projectionMatrix;
