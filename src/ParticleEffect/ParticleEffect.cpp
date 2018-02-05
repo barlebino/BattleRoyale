@@ -29,7 +29,7 @@ std::vector<Particle> ParticleEffect::generateParticles() {
     std::vector<Particle> vp = std::vector<Particle>();
     for (int i = 0; i < total; i++) {
         //Particle p = Particle(type, i, total, position, duration);
-        vp.emplace_back(type, i, total, pe->position, pe->mesh, pe->modelTexture);
+        vp.emplace_back(type, i, total, pe->position);
         
     }
     return vp;
@@ -40,7 +40,7 @@ void ParticleEffect::update() {
     t += dt;
     life += dt;
     tData = life / duration;
-    if (life < duration) {
+    if (life < duration && !toDie) {
         for (int i = 0; i < total; i++) {
             particles[i].update(tData);
         }

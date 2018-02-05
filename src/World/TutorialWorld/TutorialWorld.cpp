@@ -9,17 +9,17 @@ void TutorialWorld::init(Context &ctx, Loader &loader) {
     this->camera = new Camera;
 
     /* Entities */
-    Mesh *mesh = loader.loadObjMesh("bunny.obj");
+    Mesh *mesh = loader.loadObjMesh("cube.obj");
     ModelTexture modelTexture(0.3f,
                     glm::vec3(0.f, 0.f, 1.f),
                     glm::vec3(1.f));
     //NEW CODE
     int type = 0;
-    int n = 500;
-    int duration = 10.f;
+    int n = 10000;
+    int duration = 1.f;
     glm::vec3 position = glm::vec3(50.f, -5.f, -5.f);
     glm::vec3 rotation = glm::vec3(0.f, 0.f, 0.f);
-    glm::vec3 scale = glm::vec3(1.f);
+    glm::vec3 scale = glm::vec3(0.1f);
     Entity *pe = new Entity(mesh, modelTexture, position, rotation, scale);
     ParticleEffect *explosion = spawnParticleEffect(type, n, duration, pe);
 
@@ -57,10 +57,6 @@ void TutorialWorld::prepareUniforms() {
     UniformData *lightPos = new UniformData{ UniformType::Vec3, "lightPos", (void *)&light->position };
     UniformData *lightCol = new UniformData{ UniformType::Vec3, "lightCol", (void *)&light->color };
     UniformData *lightAtt = new UniformData{ UniformType::Vec3, "lightAtt", (void *)&light->attenuation };
-    UniformData *timeData = new UniformData{ UniformType::Float, "timeData", (void *)&particleEffects[0]->tData };
-    UniformData *total = new UniformData{ UniformType::SignedInt32, "total", (void *)&particleEffects[0]->total };
-    UniformData *origin = new UniformData{ UniformType::Vec3, "origin", (void *)&particleEffects[0]->pe->position };
-
 
     uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(PData);
     uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(VData);
@@ -68,10 +64,6 @@ void TutorialWorld::prepareUniforms() {
     uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(lightPos);
     uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(lightCol);
     uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(lightAtt);
-    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(timeData);
-    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(total);
-    uniforms[MasterRenderer::ShaderTypes::PARTICLE_SHADER].push_back(origin);
-
 
     uniforms[MasterRenderer::ShaderTypes::ENTITY_SHADER].push_back(PData);
     uniforms[MasterRenderer::ShaderTypes::ENTITY_SHADER].push_back(VData);

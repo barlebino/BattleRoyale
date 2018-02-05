@@ -85,11 +85,10 @@ void ParticleShader::render() {
         int pos = getAttribute("particleOffset");
         unsigned int partBufId;
         
-
         /* Generate new position every frame */
         std::vector<float> partBuf;
         for (int i = 0; i < p->total; i++) {
-            glm::vec3 position = p->particles[i].sphereMove(p->tData);
+            glm::vec3 position = p->particles[i].particle.position;
             partBuf.push_back(position.x);
             partBuf.push_back(position.y);
             partBuf.push_back(position.z);
@@ -102,7 +101,7 @@ void ParticleShader::render() {
         glEnableVertexAttribArray(pos);
         glVertexAttribPointer(pos, 3, GL_FLOAT, GL_FALSE, 0, (const void *)0);
 
-        /* update particle position attribute once per instance */
+        /* Update particle position attribute once per instance */
         glVertexAttribDivisor(pos, 1);
 
         /* Draw one particle effect */
