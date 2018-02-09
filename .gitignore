@@ -3,10 +3,10 @@
 .vscode/
 .vs/
 build/
-resources/
 other/
 Win32/
 
+<<<<<<< HEAD
 *.tlog
 /x64/Debug
 /Battle Royale.vcxproj.user
@@ -16,3 +16,15 @@ Win32/
 /Debug/vc141.pdb
 /Debug/vc141.idb
 /Debug/Battle Royale.log
+=======
+*.lastbuildstate
+*.tlog
+*.log
+*.idb
+*.pdb
+/x64/Debug
+/x64/Release
+*.vcxproj
+*.filters
+*.user
+>>>>>>> 0e67de0abf23004c8fb7a042626f3befc15a79a6

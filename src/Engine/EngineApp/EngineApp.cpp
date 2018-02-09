@@ -17,10 +17,18 @@ int EngineApp::init() {
         return 1;
     }
 
+<<<<<<< HEAD
     loader.init(verbose, RESOURCE_DIR);
 
     lastFrameTime = runTime = (float)windowHandler.getTime();
 
+=======
+    scene = new Scene();
+    loader.init(verbose, RESOURCE_DIR);
+
+    lastFrameTime = runTime = (float)windowHandler.getTime();
+   
+>>>>>>> 0e67de0abf23004c8fb7a042626f3befc15a79a6
     return 0;
 }
 
@@ -44,11 +52,19 @@ void EngineApp::run() {
         windowHandler.update();
 
         /* Update all game objects and components */
+<<<<<<< HEAD
         scene.update(timeStep);
+=======
+        scene->update(timeStep);
+>>>>>>> 0e67de0abf23004c8fb7a042626f3befc15a79a6
     }
 }
 
 void EngineApp::terminate() {
     windowHandler.shutDown();
+<<<<<<< HEAD
     scene.shutDown();
+=======
+    scene->shutDown();
+>>>>>>> 0e67de0abf23004c8fb7a042626f3befc15a79a6
 }

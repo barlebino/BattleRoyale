@@ -52,6 +52,7 @@ int parseArgs(EngineApp *engine, int argc, char **argv) {
 int main(int argc, char **argv) {
     /* Singular engine */
     EngineApp engine;
+<<<<<<< HEAD
     Scene *scene = &engine.scene;
 
     if (parseArgs(&engine, argc, argv)) {
@@ -62,12 +63,25 @@ int main(int argc, char **argv) {
     if (engine.init()) {
         return 1;
     }
+=======
+
+    if (parseArgs(&engine, argc, argv) || engine.init()) {
+        return 1;
+    }
+
+    /* Scene reference for QOL */
+    Scene *scene = engine.scene;
+>>>>>>> 0e67de0abf23004c8fb7a042626f3befc15a79a6
 
     /* Create camera and camera controller components */
     GameObject *camera = scene->createGameObject();
     CameraComponent *cc = scene->createComponent<Scene::GAMELOGIC, CameraComponent>(45.f, 1280.f / 960.f, 0.01f, 250.f);
     camera->addComponent(cc);
+<<<<<<< HEAD
     camera->addComponent(scene->createComponent<Scene::GAMELOGIC, CameraController>(cc, 20.f, 30.f, GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_E, GLFW_KEY_R));
+=======
+    camera->addComponent(scene->createComponent<Scene::GAMELOGIC, CameraController>(cc, 20.f, 30.f, GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_R, GLFW_KEY_E));
+>>>>>>> 0e67de0abf23004c8fb7a042626f3befc15a79a6
 
     /* Create diffuse shader */
     glm::vec3 lightPos(100.f, 100.f, 100.f);
@@ -80,6 +94,10 @@ int main(int argc, char **argv) {
 
     /* Create bunny */
     GameObject *bunny = scene->createGameObject();
+<<<<<<< HEAD
+=======
+    bunny->transform.position = glm::vec3(5.f, 0.f, 0.f);
+>>>>>>> 0e67de0abf23004c8fb7a042626f3befc15a79a6
     bunny->transform.scale = glm::vec3(1.f);
     bunny->addComponent(scene->createComponent<Scene::RENDERABLE, DiffuseRenderableComponent>(
         scene->renderer->shaders.find("diffuse")->second->pid,
